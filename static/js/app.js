@@ -176,7 +176,7 @@ function formReset() {
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
-function addRecipeWeekplan() {
+function addRecipeWeekplan(foo) {
     
     // output the value of the dayofweek dropdown that was selected
     // if statement or switch/case to indicate which col to select based on day of week
@@ -220,8 +220,8 @@ function addRecipeWeekplan() {
     
     td = d3.select(elem);
 
+    
     /*
-
     d3.select("#checkbox-btn").on("click", function() {
 
         console.log('clicked btn');
@@ -232,18 +232,31 @@ function addRecipeWeekplan() {
         foo = d3.selectAll('input.recipe-checkbox:checked');
         console.log(foo);
 
+        /* 
         foo.each(function() {
             // recipeIDSchosen.push(this.id);
             // recipeTITLESchosen.push(this.recipe_title);
             // td.append('p').text(item).property("value", item);
             td.append('p').text(this.recipe_title).property("value", this.id);
-        });    
-    };
-
+        });
+        */
+        /*
+        foo.each(function() {
+            title = d3.select(this).attr('recipe_title');
+            td.append('p').text(title).property("value", this.id);
+        });
+        */
+    /*    
+    });
     */
 
+    foo.each(function() {
+        title = d3.select(this).attr('recipe_title');
+        td.append('p').text(title).property("value", this.id);
+    });
+
    
-    td.append('p').text('recipe here');
+    // td.append('p').text('recipe here');
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -296,78 +309,30 @@ d3.select("#checkbox-btn").on("click", function() {
 
     console.log('clicked btn');
 
-    recipeIDSchosen = [];
-    recipeTITLESchosen = [];
+    // recipeIDSchosen = [];
+    // recipeTITLESchosen = [];
 
     foo = d3.selectAll('input.recipe-checkbox:checked');
     console.log(foo);
 
+    /* 
     foo.each(function() {
-        recipeIDSchosen.push(this.id);
-        recipeTITLESchosen.push(this.recipe_title);
+        // recipeIDSchosen.push(this.id);
+        // recipeTITLESchosen.push(this.recipe_title);
+        // td.append('p').text(item).property("value", item);
+        td.append('p').text(this.recipe_title).property("value", this.id);
     });
+    */
+    /*
+    foo.each(function() {
+        title =d3.select(this).attr('recipe_title');
+        td.append('p').text(title).property("value", this.id);
+    }); 
+    */
 
-    console.log('this is what you will pass to the weekly planner below');
-    console.log("---recipeIDSchosen---");
-    console.log(recipeIDSchosen);
-    console.log("---recipeTITLESchosen---");
-    console.log(recipeTITLESchosen);
-
-
-    recipe_ids = recipeIDSchosen.toString(); // NOT SURE THIS IS NECESSARY
-
-    // Iterate through each Subject ID in the array (subjectIds) 
-    subjectIdsAscending.forEach(item => {      
-
-        // Create a new option (drop down tag item)
-        // which is appended to the drop down selector
-        // Note: use of the method append() is permitted because it is modifying HTML
-        var option = dropdownSelector.append('option');
-        
-        // Copy the subjectID value to the option tag's visible text 
-        // field and to the option tag's value field (hidden from view 
-        // but used to query the dataset and retrieve the selected record)
-        // I had mistakenly tried to use the append method here.  Doh!
-        option.text(item).property("value", item);
-      });
-
-    // try to go another page
-    // window.location.href = `/page2?recipe_ids=${recipe_ids}`;    
-
+    addRecipeWeekplan(foo);    
+       
 });
-
-
-function weekplanTable(data) {
-
-    console.log('----- IN REFRESH TABLE ')
-    console.log(data);
-
-    tbody.html('');
-
-    data.forEach(record => {
-    var row = tbody.append('tr');
-////logic: if checked -- identify the status as checked and if not set status to unchecked; add a status true or flase to records pulled from API
-        row.append('td').append('input').attr("type", "checkbox").attr('id', `${record['recipe_id']}`).attr('class', 'recipe-checkbox');            
-        row.append('td').text(record['recipe_id']);
-        row.append('td').text(record['recipe_title']);
-        row.append('td').text(record['source_url']);
-        row.append('td').text(record['likes']);
-        row.append('td').text(record['health_score']);
-        row.append('td').text(record['calories_serving']);
-        row.append('td').text(record['carbohydrates_serving']);
-        row.append('td').text(record['servings']);
-        row.append('td').text(record['cooking_minutes']);
-        console.log(record)
-    });
-    
-    // clear existing tbody    
-    // loop through the filtered data to populate the tbody
-
-}
-
-
-
-
 
 
 
