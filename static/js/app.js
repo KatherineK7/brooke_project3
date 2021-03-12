@@ -37,9 +37,9 @@ function buildTable() {
                 x = x + 1
             };           
 
-            row.append('td').append('input').attr("type", "checkbox").attr('id', `${record['recipe_id']}`).attr('class', 'recipe-checkbox');            
+            row.append('td').append('input').attr("type", "checkbox").attr('id', `${record['recipe_id']}`).attr('class', 'recipe-checkbox');
             row.append('td').text(record['recipe_id']);
-            row.append('td').text(record['recipe_title']);
+            row.append('td').text(record['recipe_title']).attr('title', `${record['recipe_title']}`);
             row.append('td').append('a')
                 .attr('href', record['source_url'])
                 .attr('target', '_blank')
@@ -89,14 +89,55 @@ function refreshTable(data) {
     // clear existing tbody    
     // loop through the filtered data to populate the tbody
 
-}
+};
 
 /// This would update checked data (as checked/unchecked) to table when a second search is initiated, as well as, store in variable, 
 /// when clicking next page
 
-function addcheckeddata(){   
+function addCheckedData(){
+
+    console.log("---clicked checkbox should activate this message---");
+
+    /*
     var checkeddata = [];
-}
+
+    console.log("---FOUL-NAME-ANON-FUNCTION---")
+    console.log('foo');
+    */
+
+    // d3.select("#checkbox-btn").on("click", function() {
+
+    // console.log('clicked btn');
+
+        // recipeIDSchosen = [];
+        // recipeTITLESchosen = [];
+
+    /*
+    foo = d3.selectAll('input.recipe-checkbox:checked');
+    checkeddata.push(foo);
+    console.log(checkeddata);    
+    */
+        /* 
+        foo.each(function() {
+            // recipeIDSchosen.push(this.id);
+            // recipeTITLESchosen.push(this.recipe_title);
+            // td.append('p').text(item).property("value", item);
+            td.append('p').text(this.recipe_title).property("value", this.id);
+        });
+        */
+        /*
+        foo.each(function() {
+            title = d3.select(this).attr('recipe_title');
+            td.append('p').text(title).property("value", this.id);
+        }); 
+        
+
+        */
+        // addRecipeWeekplan(foo);    
+       
+};
+
+addCheckedData();
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -176,7 +217,7 @@ function formReset() {
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
-function addRecipeWeekplan(foo) {
+function addRecipeWeekplan() {
     
     // output the value of the dayofweek dropdown that was selected
     // if statement or switch/case to indicate which col to select based on day of week
@@ -219,9 +260,7 @@ function addRecipeWeekplan(foo) {
 
     
     td = d3.select(elem);
-
     
-    /*
     d3.select("#checkbox-btn").on("click", function() {
 
         console.log('clicked btn');
@@ -240,20 +279,24 @@ function addRecipeWeekplan(foo) {
             td.append('p').text(this.recipe_title).property("value", this.id);
         });
         */
-        /*
+        
+        
         foo.each(function() {
-            title = d3.select(this).attr('recipe_title');
+            // title = d3.select(this).attr('recipe_title');
             td.append('p').text(title).property("value", this.id);
         });
-        */
-    /*    
+        
+    
     });
-    */
+    
 
+    /*
     foo.each(function() {
-        title = d3.select(this).attr('recipe_title');
+        // title = d3.select(this).attr('recipe_title');
         td.append('p').text(title).property("value", this.id);
     });
+    */
+    
 
    
     // td.append('p').text('recipe here');
@@ -270,18 +313,18 @@ filterbtn = d3.select('#filter-btn');
 weekplanbtn = d3.select('#weekplan-btn');  //////////// PROJECT3 ADDITION
 resetbtn = d3.select('#reset-btn');
 checkbox = d3.select('#checkbox-btn');
-queryfield = d3.select('#query')
-cuisinefield = d3.select('#cuisine')
-typeofrecipefield = d3.select('#type_of_recipe')
-calories = d3.select('#calories')
-cookingminutesfield = d3.select('#cookingMinutes')
+queryfield = d3.select('#query');
+cuisinefield = d3.select('#cuisine');
+typeofrecipefield = d3.select('#type_of_recipe');
+calories = d3.select('#calories');
+cookingminutesfield = d3.select('#cookingMinutes');
 
 
 // Add event listeners to the web elements
 filterbtn.on('click', recipemetadataAPIreturn);
 weekplanbtn.on('click', addRecipeWeekplan); //////////// PROJECT3 ADDITION
 resetbtn.on('click', formReset);
-checkbox.on('click', addcheckeddata);
+checkbox.on('click', addCheckedData);
 queryfield.on('change', recipemetadataAPIreturn);
 cuisinefield.on('change', recipemetadataAPIreturn);
 typeofrecipefield.on('change', recipemetadataAPIreturn);
@@ -302,9 +345,10 @@ buildTable();
 // FOUL-NAME-ANON-FUNCTION -- ADD VALUES FROM CHECKED BOXES TO MEAL PLANNER
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
+/*
 console.log("---FOUL-NAME-ANON-FUNCTION---")
 console.log('foo');
+
 d3.select("#checkbox-btn").on("click", function() {
 
     console.log('clicked btn');
@@ -325,14 +369,16 @@ d3.select("#checkbox-btn").on("click", function() {
     */
     /*
     foo.each(function() {
-        title =d3.select(this).attr('recipe_title');
+        title = d3.select(this).attr('recipe_title');
         td.append('p').text(title).property("value", this.id);
     }); 
-    */
+    
 
+    
     addRecipeWeekplan(foo);    
        
 });
+*/
 
 
 
@@ -413,7 +459,7 @@ function ingredientsAPIreturn(selectedRecipeIDs){
 
 
 // Create function to generate and populate the table
-function buildGroceriesTable() { 
+function buildGroceriesTable() {
 
     // Identify the table and tbody
     var tbody2 = d3.select('#grocery-tbody');
@@ -432,7 +478,7 @@ function buildGroceriesTable() {
             console.log('this is going in the table');
             console.log(record);
             var row = tbody2.append('tr');
-        ////logic: if checked -- identify the status as checked and if not set status to unchecked; add a status true or flase to records pulled from API
+            ////logic: if checked -- identify the status as checked and if not set status to unchecked; add a status true or flase to records pulled from API
                 // function that counts the number of recipes and then assigns an number incrementing by 1
                 
                 row.append('td').text(record['recipe_id']);
@@ -443,7 +489,6 @@ function buildGroceriesTable() {
                 row.append('td').text(record['size']);            
                 console.log(record);
     
-            });
+        });
     });
-}
-
+};
