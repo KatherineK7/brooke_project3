@@ -5,11 +5,15 @@
 // Identify the table and tbody
 var tbody = d3.select('#ufo-tbody');
 
+/////////////////////////////////////////////////////////////////////////
+// PROJECT 3 ADDITION ///////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 // test
 // We didn't use .then() because of the version of d3 we are using, as I understand it
 //d3.json("/api/recipemetadata").then((recipes) => {
    //console.log(recipes)
 //});
+/////////////////////////////////////////////////////////////////////////
 
 d3.json("/api/recipemetadata", function(recipes){
     console.log(recipes)
@@ -30,14 +34,14 @@ function buildTable() {
     d3.json("/api/recipemetadata", function(recipes){
         recipes.forEach(record => {
         var row = tbody.append('tr');
-////logic: if checked -- identify the status as checked and if not set status to unchecked; add a status true or flase to records pulled from API
+            ////logic: if checked -- identify the status as checked and if not set status to unchecked; add a status true or flase to records pulled from API
             // function that counts the number of recipes and then assigns an number incrementing by 1
             x = 0
             for (var i=0, len=recipes.length; i< len; i++) {
                 x = x + 1
             };           
 
-            row.append('td').append('input').attr("type", "checkbox").attr('id', `${record['recipe_id']}`).attr('class', 'recipe-checkbox');
+            row.append('td').append('input').attr("type", "checkbox").attr('id', `${record['recipe_id']}`).attr('title', `${record['recipe_title']}`).attr('class', 'recipe-checkbox');
             row.append('td').text(record['recipe_id']);
             row.append('td').text(record['recipe_title']).attr('title', `${record['recipe_title']}`);
             row.append('td').append('a')
@@ -53,6 +57,14 @@ function buildTable() {
             console.log(record)
 
         });
+
+        /////////////////////////////////////////////////////////////////////////
+        // PROJECT 3 ADDITION ///////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////
+        // 20210312 - calling this function within the promise to ensure that 
+        //              the event listener is attached before the elements is "destroyed" in the DOM
+        activateTableEventListeners();
+        /////////////////////////////////////////////////////////////////////////
     });
 };
 
@@ -73,7 +85,7 @@ function refreshTable(data) {
     data.forEach(record => {
     var row = tbody.append('tr');
 ////logic: if checked -- identify the status as checked and if not set status to unchecked; add a status true or flase to records pulled from API
-        row.append('td').append('input').attr("type", "checkbox").attr('id', `${record['recipe_id']}`).attr('class', 'recipe-checkbox');            
+        row.append('td').append('input').attr("type", "checkbox").attr('id', `${record['recipe_id']}`).attr('title', `${record['recipe_title']}`).attr('class', 'recipe-checkbox');            
         row.append('td').text(record['recipe_id']);
         row.append('td').text(record['recipe_title']);
         row.append('td').text(record['source_url']);
@@ -89,55 +101,37 @@ function refreshTable(data) {
     // clear existing tbody    
     // loop through the filtered data to populate the tbody
 
+        /////////////////////////////////////////////////////////////////////////
+        // PROJECT 3 ADDITION ///////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////
+        // 20210312 - there is no "promise" in this function, so it is fine to call this here
+        activateTableEventListeners();
+        /////////////////////////////////////////////////////////////////////////
+
 };
 
-/// This would update checked data (as checked/unchecked) to table when a second search is initiated, as well as, store in variable, 
-/// when clicking next page
+
+/////////////////////////////////////////////////////////////////////////
+// PROJECT 3 ADDITION ///////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+// FUNCTION addCheckedData()
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+
+// NOTE: we used this to debug our Event Listener / "promise" issue
 
 function addCheckedData(){
 
     console.log("---clicked checkbox should activate this message---");
 
-    /*
-    var checkeddata = [];
-
-    console.log("---FOUL-NAME-ANON-FUNCTION---")
-    console.log('foo');
-    */
-
-    // d3.select("#checkbox-btn").on("click", function() {
-
-    // console.log('clicked btn');
-
-        // recipeIDSchosen = [];
-        // recipeTITLESchosen = [];
-
-    /*
-    foo = d3.selectAll('input.recipe-checkbox:checked');
-    checkeddata.push(foo);
-    console.log(checkeddata);    
-    */
-        /* 
-        foo.each(function() {
-            // recipeIDSchosen.push(this.id);
-            // recipeTITLESchosen.push(this.recipe_title);
-            // td.append('p').text(item).property("value", item);
-            td.append('p').text(this.recipe_title).property("value", this.id);
-        });
-        */
-        /*
-        foo.each(function() {
-            title = d3.select(this).attr('recipe_title');
-            td.append('p').text(title).property("value", this.id);
-        }); 
-        
-
-        */
-        // addRecipeWeekplan(foo);    
+    checkedItem = d3.event.target;
+    itemTitle = checkedItem['title'];
+    console.log("---checkedItem---");
+    console.log(itemTitle);
        
 };
-
-addCheckedData();
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -207,7 +201,6 @@ function formReset() {
 };
 
 
-
 /////////////////////////////////////////////////////////////////////////
 // PROJECT 3 ADDITION ///////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
@@ -257,49 +250,20 @@ function addRecipeWeekplan() {
             console.log(elem);
             break;
     };
-
     
     td = d3.select(elem);
     
-    d3.select("#checkbox-btn").on("click", function() {
-
-        console.log('clicked btn');
-
-        // recipeIDSchosen = [];
-        // recipeTITLESchosen = [];
-
-        foo = d3.selectAll('input.recipe-checkbox:checked');
-        console.log(foo);
-
-        /* 
-        foo.each(function() {
-            // recipeIDSchosen.push(this.id);
-            // recipeTITLESchosen.push(this.recipe_title);
-            // td.append('p').text(item).property("value", item);
-            td.append('p').text(this.recipe_title).property("value", this.id);
-        });
-        */
-        
-        
-        foo.each(function() {
-            // title = d3.select(this).attr('recipe_title');
-            td.append('p').text(title).property("value", this.id);
-        });
-        
+    checkeddataX = d3.selectAll('input.recipe-checkbox:checked');
+    console.log("---checkeddataX---");
+    console.log(checkeddataX);
     
+    checkeddataX.each(function() {
+        // title = d3.select(this).attr('recipe_title');        
+        // console.log("---title---")
+        // console.log(title)
+        td.append('p').text(this.title).attr("id", this.id);
     });
-    
 
-    /*
-    foo.each(function() {
-        // title = d3.select(this).attr('recipe_title');
-        td.append('p').text(title).property("value", this.id);
-    });
-    */
-    
-
-   
-    // td.append('p').text('recipe here');
 };
 
 /////////////////////////////////////////////////////////////////////////
@@ -308,23 +272,43 @@ function addRecipeWeekplan() {
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
+// Call the function to initially load the table
+buildTable();
+
+/////////////////////////////////////////////////////////////////////////
+// PROJECT 3 ADDITION ///////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+test = d3.selectAll('.recipe-checkbox');
+console.log(test);
+
+/* sample code to make your program wait */
+// setTimeout(function(){
+//     test = d3.selectAll('.recipe-checkbox');
+//     console.log(test);
+
+// }, 5000)
+
+// 20210312 - added this function becuase checkboxes are created in both buildTable() and refreshTable() functions
+function activateTableEventListeners() {
+    checkbox = d3.selectAll('.recipe-checkbox');    
+    checkbox.on('click', addCheckedData);
+};
+/////////////////////////////////////////////////////////////////////////
+
 // Identify web elements on the page
 filterbtn = d3.select('#filter-btn');
 weekplanbtn = d3.select('#weekplan-btn');  //////////// PROJECT3 ADDITION
 resetbtn = d3.select('#reset-btn');
-checkbox = d3.select('#checkbox-btn');
 queryfield = d3.select('#query');
 cuisinefield = d3.select('#cuisine');
 typeofrecipefield = d3.select('#type_of_recipe');
 calories = d3.select('#calories');
 cookingminutesfield = d3.select('#cookingMinutes');
 
-
 // Add event listeners to the web elements
 filterbtn.on('click', recipemetadataAPIreturn);
 weekplanbtn.on('click', addRecipeWeekplan); //////////// PROJECT3 ADDITION
 resetbtn.on('click', formReset);
-checkbox.on('click', addCheckedData);
 queryfield.on('change', recipemetadataAPIreturn);
 cuisinefield.on('change', recipemetadataAPIreturn);
 typeofrecipefield.on('change', recipemetadataAPIreturn);
@@ -332,93 +316,35 @@ calories.on('change', recipemetadataAPIreturn);
 cookingminutesfield.on('change', recipemetadataAPIreturn);
 
 
-// Call the function to initially load the table
-buildTable();
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+// AWE SHUCKS NEW NAME!!!! -- ADD VALUES FROM CHECKED BOXES TO GROCERY LIST
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 
-
-
-/////////////////////////////////////////////////////////////////////////
-// PROJECT 3 ADDITION ///////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-// FOUL-NAME-ANON-FUNCTION -- ADD VALUES FROM CHECKED BOXES TO MEAL PLANNER
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/*
-console.log("---FOUL-NAME-ANON-FUNCTION---")
-console.log('foo');
-
+console.log('recipeIDs2');
 d3.select("#checkbox-btn").on("click", function() {
 
     console.log('clicked btn');
 
-    // recipeIDSchosen = [];
-    // recipeTITLESchosen = [];
-
-    foo = d3.selectAll('input.recipe-checkbox:checked');
-    console.log(foo);
-
-    /* 
-    foo.each(function() {
-        // recipeIDSchosen.push(this.id);
-        // recipeTITLESchosen.push(this.recipe_title);
-        // td.append('p').text(item).property("value", item);
-        td.append('p').text(this.recipe_title).property("value", this.id);
-    });
-    */
-    /*
-    foo.each(function() {
-        title = d3.select(this).attr('recipe_title');
-        td.append('p').text(title).property("value", this.id);
-    }); 
-    
-
-    
-    addRecipeWeekplan(foo);    
-       
-});
-*/
+    recipeIDsToPage2 = [];
 
 
+    recipeIDs2 = d3.select('#weekplan-table').selectAll('p');
+    console.log(recipeIDs2);
 
-
-
-
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-// ASSSHIT!!!! -- ADD VALUES FROM CHECKED BOXES TO GROCERY LIST
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-
-console.log('foo');
-d3.select("#checkbox-btn").on("click", function() {
-
-    console.log('clicked btn');
-
-    assshit = [];
-    foo = d3.selectAll('input.recipe-checkbox:checked');
-    console.log(foo);
-
-    foo.each(function() {
-        assshit.push(this.id);
+    recipeIDs2.each(function() {
+        recipeIDsToPage2.push(this.id);
     });
 
     console.log('this is what you will pass to the next page');
-    console.log(assshit);
+    console.log(recipeIDsToPage2);
 
 
-    recipe_ids = assshit.toString();
+    recipe_ids = recipeIDsToPage2.toString();
 
     // try to go another page
-    window.location.href = `/page2?recipe_ids=${recipe_ids}`;
-    
+    window.location.href = `/page2?recipe_ids=${recipe_ids}`;    
 
 });
 
@@ -442,21 +368,15 @@ function ingredientsAPIreturn(selectedRecipeIDs){
         });
     });
 
-
-    // PLACEHOLDER FOR FUNCTION CALL TO MOVE THE INGREDIENT QUERY API CALL RETURNS TO 2ND HTML PAGE
     
 };
 
 
-
-
- /////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 // FUNCTION buildGroceriesTable()
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
-
 
 // Create function to generate and populate the table
 function buildGroceriesTable() {
